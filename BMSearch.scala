@@ -15,29 +15,23 @@ object BMSearch extends App {
   }
 
   // 探索
-  var j = pattern.length - 1
-  var p = 0
+  var t = 0
   var ans = -1
 
-  while (j < text.length && ans == -1) {
-    p = pattern.length - 1
+  while (t < text.length - pattern.length && ans == -1) {
+    var s = pattern.length - 1
     var isMatch = true
+    val partText = text.slice(t, t + pattern.length)
 
-    while (p >= 0 && j < text.length && isMatch) {
-      if (pattern(p) == text(j)) {
-        p = p - 1
-        j = j + 1
-      } else {
-        isMatch = false
-      }
+    while (s > 0 && isMatch) {
+      if (pattern(s) != partText(s)) isMatch = false else s = s - 1
     }
-    if (p < 0) ans = j
 
-    var shift1 = createMap.getOrElse(text(j), pattern.length)
-    var shift2 = pattern.length - p
-    j = j + shift1 max j + shift2
+    if (isMatch) ans = t
+
+    var shift = createMap.getOrElse(partText(s), pattern.length)
+    t = t + shift
   }
 
   println(ans)
-
 }
